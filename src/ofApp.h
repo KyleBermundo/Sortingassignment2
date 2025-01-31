@@ -20,5 +20,11 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+		void generateRandomNumbers();  // Function to generate random numbers
+
+private:
+	std::vector<int> numbers;      // Stores the random numbers (circle radii)
+	std::vector<ofVec2f> positions; // Stores circle positions
 		
 };
