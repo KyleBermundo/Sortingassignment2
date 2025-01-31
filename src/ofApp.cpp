@@ -83,7 +83,7 @@ void ofApp::generateRandomNumbers() {
     numbers.clear();
     positions.clear();
 
-    int spacing = ofGetWidth() / 6; // Divide width into 6 sections for spacing
+    int spacing = ofGetWidth() / 6; // it creates spacing between each circle that is generated
 
     for (int i = 0; i < 5; i++) {
         int randNum = ofRandom(10, 100); // Generate random number
