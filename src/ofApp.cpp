@@ -7,7 +7,9 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-
+    if (sorting) {
+        bubbleSortStep();
+    }
 }
 
 //--------------------------------------------------------------
@@ -29,6 +31,10 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
     if (key == 'r') {
         generateRandomNumbers();
+    }
+    else if (key == 'b' && !sorting) { //bubblesort button
+        sorting = true;
+        currentStep = 0; //to reset sorting progress
     }
 }
 
@@ -81,7 +87,7 @@ void ofApp::gotMessage(ofMessage msg){
 void ofApp::dragEvent(ofDragInfo dragInfo){ 
 
 }
-
+//--------------------------------------------------------------
 void ofApp::generateRandomNumbers() {
     numbers.clear();
     positions.clear();
@@ -94,5 +100,25 @@ void ofApp::generateRandomNumbers() {
 
         // Calculate x position and keep circles centered vertically
         positions.push_back(ofVec2f((i + 1) * spacing, ofGetHeight() / 2));
+    }
+}
+//----------------------------------------------------------------
+void ofApp::bubbleSortStep() {
+    if (sorting) {
+        bool swapped = false;
+
+        for (int j = 0; j < numbers.size() - 1 - currentStep; j++) {
+            if (numbers[j] > numbers[j + 1]) {
+                std::swap(numbers[j], numbers[j + 1]);
+                swapped = true;
+            }
+        }
+
+        currentStep++; //moves on to the next step
+
+        if (!swapped || currentStep >= numbers.size()) {
+            
+            sorting = false; //to stop if its done
+        }
     }
 }

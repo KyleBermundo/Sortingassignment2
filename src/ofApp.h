@@ -26,5 +26,9 @@ class ofApp : public ofBaseApp{
 private:
 	std::vector<int> numbers;      // Stores the random numbers (circle radii)
 	std::vector<ofVec2f> positions; // Stores circle positions
+
+	bool sorting = false; // Flag to track sorting state
+	int currentStep = 0;  // Step counter for sorting
+	void bubbleSortStep(); // Function to perform one step of Bubble Sort
 		
 };
