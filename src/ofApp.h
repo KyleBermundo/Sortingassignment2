@@ -30,5 +30,10 @@ private:
 	bool sorting = false; // Flag to track sorting state
 	int currentStep = 0;  // Step counter for sorting
 	void bubbleSortStep(); // Function to perform one step of Bubble Sort
+
+private:
+	bool inserting = false; // Flag to track sorting state
+	int insertIndex = 1;  // Step counter for Insertion Sort
+	void insertionSortStep(); // Function to perform one step of Insertion Sort
 		
 };

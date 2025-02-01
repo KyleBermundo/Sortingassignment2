@@ -10,6 +10,9 @@ void ofApp::update(){
     if (sorting) {
         bubbleSortStep();
     }
+    if (inserting) {
+        insertionSortStep();
+    }
 }
 
 //--------------------------------------------------------------
@@ -36,6 +39,11 @@ void ofApp::keyPressed(int key){
         sorting = true;
         currentStep = 0; //to reset sorting progress
     }
+    else if (key == 'i' && !inserting) {
+        inserting = true;
+        insertIndex = 1; //same thing as the previous sort it resets the progress
+    }
+    
 }
 
 //--------------------------------------------------------------
@@ -119,6 +127,26 @@ void ofApp::bubbleSortStep() {
         if (!swapped || currentStep >= numbers.size()) {
             
             sorting = false; //to stop if its done
+        }
+    }
+}
+//-----------------------------------------------------------------
+void ofApp::insertionSortStep() {
+    if (inserting) {
+        if (insertIndex < numbers.size()) {
+            int key = numbers[insertIndex];
+            int j = insertIndex - 1;
+
+            while (j >= 0 && numbers[j] > key) {
+                numbers[j + 1] = numbers[j]; //this will shift the largest numbers to the right
+                j--;
+            }
+            numbers[j + 1] = key; //places the key at the right position
+
+            insertIndex++; //moves on to the next step
+        }
+        else {
+            inserting = false; //stops the sorting when done
         }
     }
 }
