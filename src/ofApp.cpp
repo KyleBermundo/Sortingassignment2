@@ -25,6 +25,7 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
+//this will randomize the numbners that have been made when initializing the program.
 void ofApp::keyPressed(int key){
     if (key == 'r') {
         generateRandomNumbers();
