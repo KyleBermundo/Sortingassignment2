@@ -13,6 +13,9 @@ void ofApp::update(){
     if (inserting) {
         insertionSortStep();
     }
+    if (merging) {
+        mergeSortStep();
+    }
 }
 
 //--------------------------------------------------------------
@@ -43,6 +46,10 @@ void ofApp::keyPressed(int key){
         inserting = true;
         insertIndex = 1; //same thing as the previous sort it resets the progress
     }
+    else if (key == 'm' && !merging) { // Merge Sort
+        merging = true;
+    }
+
     
 }
 
@@ -150,3 +157,65 @@ void ofApp::insertionSortStep() {
         }
     }
 }
+//-------------------------------------------------------------------
+// merge sort step
+void ofApp::mergeSortStep() {
+    if (merging) {
+        mergeSortHelper(0, numbers.size() - 1); // Start Merge Sort
+        merging = false; // Stop sorting when done
+    }
+}
+//--------------------------------------------------------------------
+//sort helper for merge
+void ofApp::mergeSortHelper(int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2; // Find the middle point
+        mergeSortHelper(left, mid); // Sort the first half
+        mergeSortHelper(mid + 1, right); // Sort the second half
+        merge(left, mid, right); // Merge the sorted halves
+    }
+}
+//---------------------------------------------------------------------
+//merge function
+void ofApp::merge(int left, int mid, int right) {
+    int n1 = mid - left + 1; // Size of the left subarray
+    int n2 = right - mid;    // Size of the right subarray
+
+    // create temporary arrays
+    std::vector<int> leftArray(n1), rightArray(n2);
+
+    // copy data to temporary arrays
+    for (int i = 0; i < n1; i++) {
+        leftArray[i] = numbers[left + i];
+    }
+    for (int i = 0; i < n2; i++) {
+        rightArray[i] = numbers[mid + 1 + i];
+    }
+    // merge the temporary arrays back into numbers[left..right]
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (leftArray[i] <= rightArray[j]) {
+            numbers[k] = leftArray[i];
+            i++;
+        }
+        else {
+            numbers[k] = rightArray[j];
+            j++;
+        }
+        k++;
+    }
+    // copy remaining elements of leftArray, if any
+    while (i < n1) {
+        numbers[k] = leftArray[i];
+        i++;
+        k++;
+    }
+
+    // copy remaining elements of rightArray, if any
+    while (j < n2) {
+        numbers[k] = rightArray[j];
+        j++;
+        k++;
+    }
+}
+//------------------------------------------------------------------------

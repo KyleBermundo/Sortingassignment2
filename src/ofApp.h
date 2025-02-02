@@ -36,4 +36,15 @@ private:
 	int insertIndex = 1;  // Step counter for Insertion Sort
 	void insertionSortStep(); // Function to perform one step of Insertion Sort
 		
+private:
+	bool merging = false; // Flag to track Merge Sort state
+	void mergeSortStep(); // Function to perform one step of Merge Sort
+	void mergeSortHelper(int left, int right); // Recursive helper for Merge Sort
+	void merge(int left, int mid, int right); // Function to merge two halves
+
+private:
+	bool quickSorting = false; // Flag to track Quick Sort state
+	void quickSortStep(); // Function to perform one step of Quick Sort
+	void quickSortHelper(int low, int high); // Recursive helper for Quick Sort
+	int partition(int low, int high); // Function to partition the array
 };
