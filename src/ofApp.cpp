@@ -41,23 +41,24 @@ void ofApp::keyPressed(int key){
     if (key == 'r') {
         generateRandomNumbers();
     }
-    else if (key == 'b' && !sorting) { //bubblesort button
+    else if (key == 'b' && !sorting) { // Bubble Sort
         sorting = true;
-        currentStep = 0; //to reset sorting progress
+        currentStep = 0;
+        lastStepTime = ofGetElapsedTimef(); // Reset the timer
     }
-    else if (key == 'i' && !inserting) {
+    else if (key == 'i' && !inserting) { // Insertion Sort
         inserting = true;
-        insertIndex = 1; //same thing as the previous sort it resets the progress
+        insertIndex = 1;
+        lastStepTime = ofGetElapsedTimef(); // Reset the timer
     }
     else if (key == 'm' && !merging) { // Merge Sort
         merging = true;
+        lastStepTime = ofGetElapsedTimef(); // Reset the timer
     }
     else if (key == 'q' && !quickSorting) { // Quick Sort
         quickSorting = true;
-    }
-
-
-    
+        lastStepTime = ofGetElapsedTimef(); // Reset the timer
+    }  
 }
 
 //--------------------------------------------------------------
@@ -127,50 +128,61 @@ void ofApp::generateRandomNumbers() {
 //----------------------------------------------------------------
 void ofApp::bubbleSortStep() {
     if (sorting) {
+        float currentTime = ofGetElapsedTimef(); // Get the current time
+        if (currentTime - lastStepTime >= stepDelay) { // Check if delay has passed
+            bool swapped = false;
 
-        bool swapped = false;
-
-        for (int j = 0; j < numbers.size() - 1 - currentStep; j++) {
-            if (numbers[j] > numbers[j + 1]) {
-                std::swap(numbers[j], numbers[j + 1]);
-                swapped = true;
+            for (int j = 0; j < numbers.size() - 1 - currentStep; j++) {
+                if (numbers[j] > numbers[j + 1]) {
+                    std::swap(numbers[j], numbers[j + 1]);
+                    swapped = true;
+                }
             }
-        }
 
-        currentStep++; //moves on to the next step
+            currentStep++; // Move to the next step
+            lastStepTime = currentTime; // Update the last step time
 
-        if (!swapped || currentStep >= numbers.size()) {
-            
-            sorting = false; //to stop if its done
+            if (!swapped || currentStep >= numbers.size()) {
+                sorting = false; // Stop sorting if done
+            }
         }
     }
 }
 //-----------------------------------------------------------------
 void ofApp::insertionSortStep() {
     if (inserting) {
-        if (insertIndex < numbers.size()) {
-            int key = numbers[insertIndex];
-            int j = insertIndex - 1;
+        float currentTime = ofGetElapsedTimef(); // Get the current time
+        if (currentTime - lastStepTime >= stepDelay) { // Check if delay has passed
+            if (insertIndex < numbers.size()) {
+                int key = numbers[insertIndex];
+                int j = insertIndex - 1;
 
-            while (j >= 0 && numbers[j] > key) {
-                numbers[j + 1] = numbers[j]; //this will shift the largest numbers to the right
-                j--;
+                while (j >= 0 && numbers[j] > key) {
+                    numbers[j + 1] = numbers[j]; // Shift elements to the right
+                    j--;
+                }
+                numbers[j + 1] = key; // Place the key in the correct position
+
+                insertIndex++; // Move to the next step
+                lastStepTime = currentTime; // Update the last step time
             }
-            numbers[j + 1] = key; //places the key at the right position
-
-            insertIndex++; //moves on to the next step
-        }
-        else {
-            inserting = false; //stops the sorting when done
+            else {
+                inserting = false; // Stop sorting if done
+            }
         }
     }
 }
+
 //-------------------------------------------------------------------
 // merge sort step
 void ofApp::mergeSortStep() {
     if (merging) {
-        mergeSortHelper(0, numbers.size() - 1); // Start Merge Sort
-        merging = false; // Stop sorting when done
+        float currentTime = ofGetElapsedTimef(); // Get the current time
+        if (currentTime - lastStepTime >= stepDelay) { // Check if delay has passed
+            mergeSortHelper(0, numbers.size() - 1); // Start Merge Sort
+            merging = false; // Stop sorting when done
+            lastStepTime = currentTime; // Update the last step time
+        }
     }
 }
 //--------------------------------------------------------------------
@@ -189,17 +201,18 @@ void ofApp::merge(int left, int mid, int right) {
     int n1 = mid - left + 1; // Size of the left subarray
     int n2 = right - mid;    // Size of the right subarray
 
-    // create temporary arrays
+    // Create temporary arrays
     std::vector<int> leftArray(n1), rightArray(n2);
 
-    // copy data to temporary arrays
+    // Copy data to temporary arrays
     for (int i = 0; i < n1; i++) {
         leftArray[i] = numbers[left + i];
     }
     for (int i = 0; i < n2; i++) {
         rightArray[i] = numbers[mid + 1 + i];
     }
-    // merge the temporary arrays back into numbers[left..right]
+
+    // Merge the temporary arrays back into numbers[left..right]
     int i = 0, j = 0, k = left;
     while (i < n1 && j < n2) {
         if (leftArray[i] <= rightArray[j]) {
@@ -212,14 +225,15 @@ void ofApp::merge(int left, int mid, int right) {
         }
         k++;
     }
-    // copy remaining elements of leftArray, if any
+
+    // Copy remaining elements of leftArray, if any
     while (i < n1) {
         numbers[k] = leftArray[i];
         i++;
         k++;
     }
 
-    // copy remaining elements of rightArray, if any
+    // Copy remaining elements of rightArray, if any
     while (j < n2) {
         numbers[k] = rightArray[j];
         j++;
@@ -230,8 +244,12 @@ void ofApp::merge(int left, int mid, int right) {
 // Quick Sort Step
 void ofApp::quickSortStep() {
     if (quickSorting) {
-        quickSortHelper(0, numbers.size() - 1); // Start Quick Sort
-        quickSorting = false; // Stop sorting when done
+        float currentTime = ofGetElapsedTimef(); // Get the current time
+        if (currentTime - lastStepTime >= stepDelay) { // Check if delay has passed
+            quickSortHelper(0, numbers.size() - 1); // Start Quick Sort
+            quickSorting = false; // Stop sorting when done
+            lastStepTime = currentTime; // Update the last step time
+        }
     }
 }
 //-------------------------------------------------------------------------
