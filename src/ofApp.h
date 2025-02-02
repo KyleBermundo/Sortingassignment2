@@ -47,4 +47,8 @@ private:
 	void quickSortStep(); // Function to perform one step of Quick Sort
 	void quickSortHelper(int low, int high); // Recursive helper for Quick Sort
 	int partition(int low, int high); // Function to partition the array
+
+private:
+	float stepDelay = 0.5f; // Delay in seconds between steps
+	float lastStepTime = 0.0f; // Time of the last step
 };

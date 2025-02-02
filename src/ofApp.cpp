@@ -16,6 +16,9 @@ void ofApp::update(){
     if (merging) {
         mergeSortStep();
     }
+    if (quickSorting) {
+        quickSortStep();
+    }
 }
 
 //--------------------------------------------------------------
@@ -49,6 +52,10 @@ void ofApp::keyPressed(int key){
     else if (key == 'm' && !merging) { // Merge Sort
         merging = true;
     }
+    else if (key == 'q' && !quickSorting) { // Quick Sort
+        quickSorting = true;
+    }
+
 
     
 }
@@ -120,6 +127,7 @@ void ofApp::generateRandomNumbers() {
 //----------------------------------------------------------------
 void ofApp::bubbleSortStep() {
     if (sorting) {
+
         bool swapped = false;
 
         for (int j = 0; j < numbers.size() - 1 - currentStep; j++) {
@@ -219,3 +227,34 @@ void ofApp::merge(int left, int mid, int right) {
     }
 }
 //------------------------------------------------------------------------
+// Quick Sort Step
+void ofApp::quickSortStep() {
+    if (quickSorting) {
+        quickSortHelper(0, numbers.size() - 1); // Start Quick Sort
+        quickSorting = false; // Stop sorting when done
+    }
+}
+//-------------------------------------------------------------------------
+// Recursive Quick Sort Helper
+void ofApp::quickSortHelper(int low, int high) {
+    if (low < high) {
+        int pivotIndex = partition(low, high); // Partition the array
+        quickSortHelper(low, pivotIndex - 1); // Sort the left subarray
+        quickSortHelper(pivotIndex + 1, high); // Sort the right subarray
+    }
+}
+//----------------------------------------------------------------------------
+// Partition Function
+int ofApp::partition(int low, int high) {
+    int pivot = numbers[high]; // Choose the last element as the pivot
+    int i = low - 1; // Index of the smaller element
+
+    for (int j = low; j < high; j++) {
+        if (numbers[j] < pivot) {
+            i++;
+            std::swap(numbers[i], numbers[j]); // Swap elements
+        }
+    }
+    std::swap(numbers[i + 1], numbers[high]); // Place the pivot in the correct position
+    return i + 1; // Return the pivot index
+}
