@@ -20,9 +20,9 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-
+		
 		void generateRandomNumbers();  // Function to generate random numbers
-
+//this is all to help make everything work without them we will be getting alot of errors.
 private:
 	std::vector<int> numbers;      // Stores the random numbers (circle radii)
 	std::vector<ofVec2f> positions; // Stores circle positions
@@ -48,7 +48,13 @@ private:
 	void quickSortHelper(int low, int high); // Recursive helper for Quick Sort
 	int partition(int low, int high); // Function to partition the array
 
+	//from deepseek was asking how i would implement the delay for all the sorts (this includes the added step delay on the sort's code)
 private:
 	float stepDelay = 0.5f; // Delay in seconds between steps
 	float lastStepTime = 0.0f; // Time of the last step
+
+private:
+	bool shuffling = false; // Flag to track shuffling state
+	int shuffleIndex = 0;   // Index for Fisher-Yates Shuffle
+	void fisherYatesShuffleStep(); // Function to perform one step of Fisher-Yates Shuffle
 };

@@ -1,11 +1,13 @@
 #include "ofApp.h"
 
 //--------------------------------------------------------------
+//asked gpt how to fix the problem and this was the problem of not adding these
 void ofApp::setup(){
     generateRandomNumbers();
 }
 
 //--------------------------------------------------------------
+//asked gpt how to fix the problem and this was the problem of not adding these
 void ofApp::update(){
     if (sorting) {
         bubbleSortStep();
@@ -19,9 +21,13 @@ void ofApp::update(){
     if (quickSorting) {
         quickSortStep();
     }
+    if (shuffling) {
+        fisherYatesShuffleStep();
+    }
 }
 
 //--------------------------------------------------------------
+//from the lecture
 void ofApp::draw(){
     ofBackground(30); // this is for a dark backround
 
@@ -36,6 +42,7 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
+//from the lecture and some unity projects ive done
 //this will randomize the numbners that have been made when initializing the program.
 void ofApp::keyPressed(int key){
     if (key == 'r') {
@@ -58,7 +65,12 @@ void ofApp::keyPressed(int key){
     else if (key == 'q' && !quickSorting) { // Quick Sort
         quickSorting = true;
         lastStepTime = ofGetElapsedTimef(); // Reset the timer
-    }  
+    } 
+    else if (key == 's' && !shuffling) { // Fisher-Yates Shuffle
+        shuffling = true;
+        shuffleIndex = 0; // Reset shuffle progress
+        lastStepTime = ofGetElapsedTimef(); // Reset the timer
+    }
 }
 
 //--------------------------------------------------------------
@@ -111,6 +123,7 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 }
 //--------------------------------------------------------------
+//from the lecture and the links ive sent during my push
 void ofApp::generateRandomNumbers() {
     numbers.clear();
     positions.clear();
@@ -126,6 +139,7 @@ void ofApp::generateRandomNumbers() {
     }
 }
 //----------------------------------------------------------------
+//from the lecture and the links ive sent during my push
 void ofApp::bubbleSortStep() {
     if (sorting) {
         float currentTime = ofGetElapsedTimef(); // Get the current time
@@ -149,6 +163,7 @@ void ofApp::bubbleSortStep() {
     }
 }
 //-----------------------------------------------------------------
+//from the lecture and the links ive sent during my push
 void ofApp::insertionSortStep() {
     if (inserting) {
         float currentTime = ofGetElapsedTimef(); // Get the current time
@@ -174,6 +189,7 @@ void ofApp::insertionSortStep() {
 }
 
 //-------------------------------------------------------------------
+//from the lecture and the links ive sent during my push (and deepseek because there were some problems for app.h and app.cpp clashing
 // merge sort step
 void ofApp::mergeSortStep() {
     if (merging) {
@@ -241,6 +257,7 @@ void ofApp::merge(int left, int mid, int right) {
     }
 }
 //------------------------------------------------------------------------
+//from the lecture and the links ive sent during my push
 // Quick Sort Step
 void ofApp::quickSortStep() {
     if (quickSorting) {
@@ -275,4 +292,25 @@ int ofApp::partition(int low, int high) {
     }
     std::swap(numbers[i + 1], numbers[high]); // Place the pivot in the correct position
     return i + 1; // Return the pivot index
+}
+//----------------------------------------------------------------------------
+// from some site called geeks for geeks https://www.geeksforgeeks.org/shuffle-a-given-array-using-fisher-yates-shuffle-algorithm/
+// and asking gpt some questions on how it works
+// Fisher-Yates Shuffle Step
+void ofApp::fisherYatesShuffleStep() {
+    if (shuffling) {
+        float currentTime = ofGetElapsedTimef(); // Get the current time
+        if (currentTime - lastStepTime >= stepDelay) { // Check if delay has passed
+            if (shuffleIndex < numbers.size() - 1) {
+                // Randomly select an index to swap with
+                int randomIndex = shuffleIndex + rand() % (numbers.size() - shuffleIndex);
+                std::swap(numbers[shuffleIndex], numbers[randomIndex]); // Swap elements
+                shuffleIndex++; // Move to the next step
+                lastStepTime = currentTime; // Update the last step time
+            }
+            else {
+                shuffling = false; // Stop shuffling when done
+            }
+        }
+    }
 }
